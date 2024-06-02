@@ -7,6 +7,7 @@ import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.client.ConnectionFactory;
 import org.apache.hadoop.hbase.client.Get;
+import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.util.Bytes;
@@ -32,6 +33,11 @@ public class ConfigDBService {
         return get;
     }
 
+    private Put addColumn(Put put, String colName, Integer val) {
+        put.addColumn(Bytes.toBytes("cf"), Bytes.toBytes(colName), Bytes.toBytes(String.valueOf(val)));
+        return put;
+    }
+
     private Integer getValue(Result result, String colName) {
         return Integer.valueOf(Bytes.toString(result.getValue(Bytes.toBytes("cf"), Bytes.toBytes(colName))));
     }
@@ -53,5 +59,14 @@ public class ConfigDBService {
         addColumn(get, "focusCntBeforeLongBreak");
         Result res = sourceTable.get(get);
         return parseRes(res);
+    }
+
+    public void put(String userId, TimerConfig timerConfig) throws IOException {
+        final var put = new Put(Bytes.toBytes(userId));
+        addColumn(put, "focusLength", timerConfig.focusLength);
+        addColumn(put, "shortBreakLength", timerConfig.shortBreakLength);
+        addColumn(put, "longBreakLength", timerConfig.longBreakLength);
+        addColumn(put, "focusCntBeforeLongBreak", timerConfig.focusCntBeforeLongBreak);
+        sourceTable.put(put);
     }
 }

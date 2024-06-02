@@ -51,6 +51,9 @@ dependencies {
     implementation('org.apache.hbase:hbase-client:2.4.9') {
         exclude group: 'ch.qos.logback', module: 'logback-classic'
     }
+
+    compileOnly 'org.projectlombok:lombok:1.18.20'
+    annotationProcessor 'org.projectlombok:lombok:1.18.20'
 }
 
 tasks.withType(JavaCompile) {

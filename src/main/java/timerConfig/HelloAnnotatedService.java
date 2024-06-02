@@ -1,16 +1,18 @@
 package timerConfig;
 
 import java.io.IOException;
-import java.util.Timer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
+import com.linecorp.armeria.common.HttpResponse;
 import com.linecorp.armeria.server.annotation.ExceptionHandler;
 import com.linecorp.armeria.server.annotation.Get;
 import com.linecorp.armeria.server.annotation.Param;
+import com.linecorp.armeria.server.annotation.Post;
 import com.linecorp.armeria.server.annotation.ProducesJson;
+import com.linecorp.armeria.server.annotation.RequestObject;
 
 import jakarta.validation.constraints.Size;
 
@@ -50,5 +52,11 @@ public class HelloAnnotatedService {
     @ProducesJson
     public TimerConfig getConfig(@Param String userId) throws IOException {
         return db.get(userId);
+    }
+
+    @Post("/config/{userId}")
+    public HttpResponse putConfig(@Param String userId, @RequestObject TimerConfig timerConfig) throws IOException {
+        db.put(userId, timerConfig);
+        return HttpResponse.ofJson(timerConfig);
     }
 }

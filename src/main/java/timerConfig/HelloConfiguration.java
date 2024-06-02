@@ -2,6 +2,7 @@ package timerConfig;
 
 import java.util.function.Function;
 
+import org.apache.http.HttpHeaders;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -29,7 +30,8 @@ public class HelloConfiguration {
                 CorsService.builderForAnyOrigin()
                            .allowCredentials()
                            .allowRequestMethods(HttpMethod.POST, HttpMethod.GET)
-                           .allowRequestHeaders("allow_request_header")
+                           .allowRequestHeaders(HttpHeaders.CONTENT_TYPE,
+                                                HttpHeaders.AUTHORIZATION)
                            .exposeHeaders("expose_header_1", "expose_header_2")
                            .preflightResponseHeader("x-preflight-cors", "Hello CORS")
                            .newDecorator();
