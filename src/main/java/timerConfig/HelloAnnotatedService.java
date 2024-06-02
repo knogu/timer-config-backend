@@ -1,6 +1,7 @@
 package timerConfig;
 
 import java.io.IOException;
+import java.util.Timer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -9,6 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import com.linecorp.armeria.server.annotation.ExceptionHandler;
 import com.linecorp.armeria.server.annotation.Get;
 import com.linecorp.armeria.server.annotation.Param;
+import com.linecorp.armeria.server.annotation.ProducesJson;
 
 import jakarta.validation.constraints.Size;
 
@@ -45,8 +47,8 @@ public class HelloAnnotatedService {
     }
 
     @Get("/config/{userId}")
-    public String getConfig(@Param String userId) throws IOException {
-        TimerConfig config = db.get(userId);
-        return String.format(config.focusLength.toString());
+    @ProducesJson
+    public TimerConfig getConfig(@Param String userId) throws IOException {
+        return db.get(userId);
     }
 }

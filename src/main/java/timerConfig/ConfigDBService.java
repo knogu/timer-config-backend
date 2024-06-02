@@ -27,11 +27,31 @@ public class ConfigDBService {
         sourceTable = conn.getTable(TableName.valueOf(sourceTableName));
     }
 
+    private Get addColumn(Get get, String colName) {
+        get.addColumn(Bytes.toBytes("cf"), Bytes.toBytes(colName));
+        return get;
+    }
+
+    private Integer getValue(Result result, String colName) {
+        return Integer.valueOf(Bytes.toString(result.getValue(Bytes.toBytes("cf"), Bytes.toBytes(colName))));
+    }
+
+    private TimerConfig parseRes(Result result) {
+        return new TimerConfig(
+               getValue(result, "focusLength"),
+               getValue(result, "shortBreakLength"),
+               getValue(result, "longBreakLength"),
+               getValue(result, "focusCntBeforeLongBreak")
+        );
+    }
+
     public TimerConfig get(String userId) throws IOException {
         final var get = new Get(Bytes.toBytes(userId));
-        get.addColumn(Bytes.toBytes("cf"), Bytes.toBytes("focusLength"));
+        addColumn(get, "focusLength");
+        addColumn(get, "shortBreakLength");
+        addColumn(get, "longBreakLength");
+        addColumn(get, "focusCntBeforeLongBreak");
         Result res = sourceTable.get(get);
-        String resStr = Bytes.toString(res.getValue(Bytes.toBytes("cf"), Bytes.toBytes("focusLength")));
-        return new TimerConfig(Integer.valueOf(resStr), 4, 15, 3);
+        return parseRes(res);
     }
 }
