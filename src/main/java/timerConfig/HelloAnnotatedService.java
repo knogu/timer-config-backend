@@ -1,5 +1,8 @@
 package timerConfig;
 
+import java.io.IOException;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
@@ -19,6 +22,11 @@ import jakarta.validation.constraints.Size;
 @Validated
 @ExceptionHandler(ValidationExceptionHandler.class)
 public class HelloAnnotatedService {
+    private ConfigDBService db;
+    @Autowired
+    public HelloAnnotatedService(ConfigDBService db) {
+        this.db = db;
+    }
 
     @Get("/")
     public String defaultHello() {
@@ -34,5 +42,11 @@ public class HelloAnnotatedService {
             @Size(min = 3, max = 10, message = "name should have between 3 and 10 characters")
             @Param String name) {
         return String.format("Hello, %s! This message is from Armeria annotated service!", name);
+    }
+
+    @Get("/config/{userId}")
+    public String getConfig(@Param String userId) throws IOException {
+        TimerConfig config = db.get(userId);
+        return String.format(config.focusLength.toString());
     }
 }
