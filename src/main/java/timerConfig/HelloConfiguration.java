@@ -1,9 +1,14 @@
 package timerConfig;
 
+import java.util.function.Function;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.linecorp.armeria.common.HttpMethod;
+import com.linecorp.armeria.server.HttpService;
 import com.linecorp.armeria.server.Server;
+import com.linecorp.armeria.server.cors.CorsService;
 import com.linecorp.armeria.server.docs.DocService;
 import com.linecorp.armeria.server.logging.AccessLogWriter;
 import com.linecorp.armeria.server.logging.LoggingService;
@@ -20,6 +25,14 @@ public class HelloConfiguration {
      */
     @Bean
     public ArmeriaServerConfigurator armeriaServerConfigurator(HelloAnnotatedService service) {
+        Function<? super HttpService, CorsService> corsService =
+                CorsService.builderForAnyOrigin()
+                           .allowCredentials()
+                           .allowRequestMethods(HttpMethod.POST, HttpMethod.GET)
+                           .allowRequestHeaders("allow_request_header")
+                           .exposeHeaders("expose_header_1", "expose_header_2")
+                           .preflightResponseHeader("x-preflight-cors", "Hello CORS")
+                           .newDecorator();
         // Customize the server using the given ServerBuilder. For example:
         return builder -> {
             // Add DocService that enables you to send Thrift and gRPC requests from web browser.
@@ -32,7 +45,7 @@ public class HelloConfiguration {
             builder.accessLogWriter(AccessLogWriter.combined(), false);
 
             // Add an Armeria annotated HTTP service.
-            builder.annotatedService(service);
+            builder.annotatedService(service, corsService);
 
             // You can also bind asynchronous RPC services such as Thrift and gRPC:
             // builder.service(THttpService.of(...));
