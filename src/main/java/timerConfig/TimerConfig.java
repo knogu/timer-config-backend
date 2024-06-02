@@ -13,15 +13,18 @@ public class TimerConfig {
     public Integer shortBreakLength;
     public Integer longBreakLength;
     public Integer focusCntBeforeLongBreak;
+    public Integer goalMinutesPerDay;
 
     @JsonCreator
     public TimerConfig(@JsonProperty("focusLength") Integer focusLength,
                        @JsonProperty("shortBreakLength") Integer shortBreakLength,
                        @JsonProperty("longBreakLength") Integer longBreakLength,
-                       @JsonProperty("focusCntBeforeLongBreak") Integer focusCntBeforeLongBreak) {
+                       @JsonProperty("focusCntBeforeLongBreak") Integer focusCntBeforeLongBreak,
+                       @JsonProperty("goalMinutesPerDay") Integer goalMinutesPerDay) {
         this.focusLength = focusLength;
         this.shortBreakLength = shortBreakLength;
         this.longBreakLength = longBreakLength;
         this.focusCntBeforeLongBreak = focusCntBeforeLongBreak;
+        this.goalMinutesPerDay = goalMinutesPerDay;
     }
 }

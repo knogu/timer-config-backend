@@ -47,7 +47,8 @@ public class ConfigDBService {
                getValue(result, "focusLength"),
                getValue(result, "shortBreakLength"),
                getValue(result, "longBreakLength"),
-               getValue(result, "focusCntBeforeLongBreak")
+               getValue(result, "focusCntBeforeLongBreak"),
+               getValue(result, "goalMinutesPerDay")
         );
     }
 
@@ -57,7 +58,11 @@ public class ConfigDBService {
         addColumn(get, "shortBreakLength");
         addColumn(get, "longBreakLength");
         addColumn(get, "focusCntBeforeLongBreak");
+        addColumn(get, "goalMinutesPerDay");
         Result res = sourceTable.get(get);
+        if (res.isEmpty()) {
+            return null;
+        }
         return parseRes(res);
     }
 
@@ -67,6 +72,7 @@ public class ConfigDBService {
         addColumn(put, "shortBreakLength", timerConfig.shortBreakLength);
         addColumn(put, "longBreakLength", timerConfig.longBreakLength);
         addColumn(put, "focusCntBeforeLongBreak", timerConfig.focusCntBeforeLongBreak);
+        addColumn(put, "goalMinutesPerDay", timerConfig.goalMinutesPerDay);
         sourceTable.put(put);
     }
 }

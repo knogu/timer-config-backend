@@ -49,9 +49,13 @@ public class HelloAnnotatedService {
     }
 
     @Get("/config/{userId}")
-    @ProducesJson
-    public TimerConfig getConfig(@Param String userId) throws IOException {
-        return db.get(userId);
+    public HttpResponse getConfig(@Param String userId) throws IOException {
+        final TimerConfig fetchedConfig = db.get(userId);
+        if (fetchedConfig == null) {
+            return HttpResponse.of(404);
+        } else {
+            return HttpResponse.ofJson(fetchedConfig);
+        }
     }
 
     @Post("/config/{userId}")
