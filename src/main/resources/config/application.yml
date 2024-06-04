@@ -5,7 +5,7 @@ spring.main.web-application-type: none
 # Additional server ports specified with Armeria configuration.
 armeria:
   ports:
-    - port: 8080
+    - port: 80
       protocols:
         - http
 
