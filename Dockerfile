@@ -14,8 +14,11 @@ COPY src src
 # 実行権限の付与
 RUN chmod +x ./gradlew
 
+# 環境変数の設定
+ENV PORT=80
+
 # ポートの公開
-EXPOSE 8080
+EXPOSE 80
 
 # アプリケーションの実行
 CMD ["./gradlew", "bootRun"]

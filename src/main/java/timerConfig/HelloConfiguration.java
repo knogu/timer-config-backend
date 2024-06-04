@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.linecorp.armeria.common.HttpMethod;
+import com.linecorp.armeria.common.util.InetAddressPredicates;
 import com.linecorp.armeria.server.HttpService;
 import com.linecorp.armeria.server.Server;
 import com.linecorp.armeria.server.cors.CorsService;
@@ -37,6 +38,7 @@ public class HelloConfiguration {
                            .newDecorator();
         // Customize the server using the given ServerBuilder. For example:
         return builder -> {
+            builder.clientAddressTrustedProxyFilter(InetAddressPredicates.ofCidr("0.0.0.0/0"));
             // Add DocService that enables you to send Thrift and gRPC requests from web browser.
             builder.serviceUnder("/docs", new DocService());
 
