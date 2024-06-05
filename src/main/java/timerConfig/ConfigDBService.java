@@ -20,7 +20,7 @@ public class ConfigDBService {
 
     public ConfigDBService() throws IOException {
         final var config = HBaseConfiguration.create();
-        config.set("hbase.zookeeper.quorum", "34.67.244.204");
+        config.set("hbase.zookeeper.quorum", "34.123.90.197");
         config.set("hbase.zookeeper.property.clientPort","2181");
 
         conn = ConnectionFactory.createConnection(config);
