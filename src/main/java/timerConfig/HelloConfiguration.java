@@ -1,5 +1,6 @@
 package timerConfig;
 
+import java.io.File;
 import java.util.function.Function;
 
 import org.apache.http.HttpHeaders;
@@ -50,6 +51,8 @@ public class HelloConfiguration {
 
             // Add an Armeria annotated HTTP service.
             builder.annotatedService(service, corsService);
+
+            builder.https(443).tls(new File("debug.crt"), new File("debug.key"), null);
 
             // You can also bind asynchronous RPC services such as Thrift and gRPC:
             // builder.service(THttpService.of(...));
